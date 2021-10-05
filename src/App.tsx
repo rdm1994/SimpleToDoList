@@ -22,14 +22,7 @@ function App() {
         {id: todoListID_2, title: "What to buy", filter: "all"},
 
     ])
-
-    let removeTodoList = (todoListID: string) => {
-        let filteredTodolist= todoLists.filter(tl=>tl.id !== todoListID)
-        setTodoLists(filteredTodolist);
-        delete tasksObj[todoListID];
-        setTasks(tasksObj);
-    }
-    let [tasksObj, setTasks] = useState({
+    const [tasksObj, setTasks] = useState({
         [todoListID_1]: [
             {id: v1(), title: "HTML&CSS", isDone: true},
             {id: v1(), title: "JS", isDone: true},
@@ -42,6 +35,12 @@ function App() {
         ]
     })
 
+    const removeTodoList = (todoListID: string) => {
+        let filteredTodolist = todoLists.filter(tl => tl.id !== todoListID)
+        setTodoLists(filteredTodolist);
+        delete tasksObj[todoListID];
+        setTasks(tasksObj);
+    }
 
     function removeTask(id: string, todoListID: string) {
         let tasks = tasksObj[todoListID];
@@ -66,8 +65,15 @@ function App() {
 
             setTasks({...tasksObj})
         }
+    }
+    function changeTaskTitle(taskId: string, newTitle: string, todoListID: string) {
+        let tasks = tasksObj[todoListID]
+        let task = tasks.find(t => t.id === taskId);
+        if (task) {
+            task.title = newTitle;
 
-        ;
+            setTasks({...tasksObj})
+        }
     }
 
 
@@ -79,15 +85,15 @@ function App() {
         }
     }
 
-
-    function addTodoList(title:string){
-        const newTodoListID=v1()
-        const newTodoList:TodoListType={
-            id:newTodoListID,title,filter:"all"
+    function addTodoList(title: string) {
+        const newTodoListID = v1()
+        const newTodoList: TodoListType = {
+            id: newTodoListID, title, filter: "all"
         }
-        setTodoLists([...todoLists,newTodoList])
-        setTasks({...tasksObj,[newTodoListID]:[]})
+        setTodoLists([...todoLists, newTodoList])
+        setTasks({...tasksObj, [newTodoListID]: []})
     }
+
 
     return (
         <div className="App">
@@ -114,6 +120,7 @@ function App() {
                         changeTaskStatus={changeStatus}
                         filter={tl.filter}
                         removeTodoList={removeTodoList}
+                        changeTaskTitle={changeTaskTitle}
                     />
 
 
